@@ -1,16 +1,21 @@
-# Prerequisites
-*.d
+*~
+.DS_Store
+*.pyc
+*.aux
+*.bbl
+*.blg
+paper.log
+paper.pdf
+handles.ec2
+server
+record_load.log
+record_tdf.log
 
 # Object files
 *.o
 *.ko
 *.obj
 *.elf
-
-# Linker output
-*.ilk
-*.map
-*.exp
 
 # Precompiled Headers
 *.gch
@@ -39,14 +44,5 @@
 # Debug files
 *.dSYM/
 *.su
-*.idb
-*.pdb
 
-# Kernel Module Compile Results
-*.mod*
-*.cmd
-.tmp_versions/
-modules.order
-Module.symvers
-Mkfile.old
-dkms.conf
+nfqueue_test
