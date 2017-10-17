@@ -9,7 +9,6 @@
 #define SECONDS_TO_NS 1000000000
 
 static unsigned int tdf = 20;
-static unsigned long long start_time = 0;
 
 inline unsigned long long timespec_to_ns(struct timespec *tp) {
   return tp->tv_sec * SECONDS_TO_NS + tp->tv_nsec;
@@ -44,13 +43,10 @@ int clock_gettime(clockid_t clk_id, struct timespec *tp) {
 
   int rc = next_clock_gettime(clk_id, tp);
   
-  /* if (!start_time) */
-  /*   start_time = timespec_to_ns(tp); */
-
   unsigned long long now = timespec_to_ns(tp);
-  unsigned long long dilated_now = start_time + (now - start_time) / tdf;
+  unsigned long long dilated_now = now / tdf;
 
-  /* printf("start_time = %lld, now = %lld, dilated_now = %lld\n", start_time, now, dilated_now); */
+  /* fprintf(stderr, "now = %lld, dilated_now = %lld\n", now, dilated_now); */
 
   ns_to_timespec(dilated_now, tp);
   
