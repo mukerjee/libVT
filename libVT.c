@@ -28,7 +28,7 @@ static void get_next_fn(void** next_fn, char* fn) {
 
 // Wrapped clock_gettime()
 int clock_gettime(clockid_t clk_id, struct timespec *tp) {
-  int (*next_clock_gettime)(clockid_t clk_id, struct timespec *tp);
+  static int (*next_clock_gettime)(clockid_t clk_id, struct timespec *tp) = NULL;
   char* fn_name = "clock_gettime";
   get_next_fn((void**)&next_clock_gettime,fn_name);
   
