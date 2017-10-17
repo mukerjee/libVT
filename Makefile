@@ -1,7 +1,7 @@
 all:    libs
 
 install: libs
-	cp libVT.so /usr/local/lib/
+	cp libVT.so /usr/lib/
 
 libs:   libVT.so
 
