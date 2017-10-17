@@ -1,9 +1,7 @@
-all:    libs
+all: libVT.so
 
-install: libs
+install: libVT.so
 	cp libVT.so /usr/lib/
-
-libs:   libVT.so
 
 libVT.so: libVT.c
 	rm -f libVT.so*
