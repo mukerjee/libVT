@@ -44,8 +44,8 @@ int clock_gettime(clockid_t clk_id, struct timespec *tp) {
 
   int rc = next_clock_gettime(clk_id, tp);
   
-  if (!start_time)
-    start_time = timespec_to_ns(tp);
+  /* if (!start_time) */
+  /*   start_time = timespec_to_ns(tp); */
 
   unsigned long long now = timespec_to_ns(tp);
   unsigned long long dilated_now = start_time + (now - start_time) / tdf;
