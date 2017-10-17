@@ -8,7 +8,7 @@
 
 #define SECONDS_TO_NS 1000000000
 
-static float tdf = 20.0;
+static unsigned int tdf = 20;
 static unsigned long long start_time = 0;
 
 inline unsigned long long timespec_to_ns(struct timespec *tp) {
