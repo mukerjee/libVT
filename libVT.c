@@ -8,8 +8,8 @@
 
 #define TDF 20
 
-int clock_gettime(clockid_t clk_id, struct timespec *tp);
-static int (*next_clock_gettime)(clockid_t clk_id, struct timespec *tp) = NULL;
+/* int clock_gettime(clockid_t clk_id, struct timespec *tp); */
+/* static int (*next_clock_gettime)(clockid_t clk_id, struct timespec *tp) = NULL; */
 
 // Find the library version of the function that we are wrapping
 static void get_next_fn(void** next_fn, char* fn) {
@@ -28,8 +28,10 @@ static void get_next_fn(void** next_fn, char* fn) {
 
 // Wrapped clock_gettime()
 int clock_gettime(clockid_t clk_id, struct timespec *tp) {
+  int (*next_clock_gettime)(clockid_t clk_id, struct timespec *tp);
   char* fn_name = "clock_gettime";
   get_next_fn((void**)&next_clock_gettime,fn_name);
+  
   printf("in clock_gettime");
   return next_clock_gettime(clk_id, tp);
 }
