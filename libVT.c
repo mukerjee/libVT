@@ -8,9 +8,6 @@
 
 #define TDF 20
 
-/* int clock_gettime(clockid_t clk_id, struct timespec *tp); */
-/* static int (*next_clock_gettime)(clockid_t clk_id, struct timespec *tp) = NULL; */
-
 // Find the library version of the function that we are wrapping
 static void get_next_fn(void** next_fn, char* fn) {
   char* msg;
