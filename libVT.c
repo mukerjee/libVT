@@ -50,7 +50,7 @@ int clock_gettime(clockid_t clk_id, struct timespec *tp) {
   unsigned long long now = timespec_to_ns(tp);
   unsigned long long dilated_now = start_time + (now - start_time) / tdf;
 
-  printf("start_time = %lld, now = %lld, dilated_now = %lld\n", start_time, now, dilated_now);
+  /* printf("start_time = %lld, now = %lld, dilated_now = %lld\n", start_time, now, dilated_now); */
 
   ns_to_timespec(dilated_now, tp);
   
