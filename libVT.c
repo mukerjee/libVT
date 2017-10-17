@@ -9,13 +9,13 @@
 #define SECONDS_TO_NS 1000000000
 
 static float tdf = 20.0;
-static u64 start_time = 0;
+static unsigned long long start_time = 0;
 
-inline u64 timespec_to_ns(struct timespec *tp) {
+inline unsigned long long timespec_to_ns(struct timespec *tp) {
   return tp->tv_sec * SECONDS_TO_NS + tp->tv_nsec;
 }
 
-inline void ns_to_timespec(u64 ns, struct timespec *tp) {
+inline void ns_to_timespec(unsigned long long ns, struct timespec *tp) {
   tp->tv_sec = ns / SECONDS_TO_NS;
   tp->tv_nsec = ns % SECONDS_TO_NS;
 }
@@ -47,8 +47,8 @@ int clock_gettime(clockid_t clk_id, struct timespec *tp) {
   if (!start_time)
     start_time = timespec_to_ns(tp);
 
-  u64 now = timespec_to_ns(tp);
-  u64 dilated_now = start_time + (now - start_time) / tdf;
+  unsigned long long now = timespec_to_ns(tp);
+  unsigned long long dilated_now = start_time + (now - start_time) / tdf;
 
   ns_to_timespec(dilated_now, tp);
   
