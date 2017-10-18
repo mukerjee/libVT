@@ -92,8 +92,10 @@ int select(int nfds, fd_set *readfds, fd_set *writefds,
   static int (*next_select)(int, fd_set*, fd_set*, fd_set*, struct timeval *) = NULL;
   get_next_fn((void**)&next_select, "select");
 
-  unsigned long long t = timeval_to_ns(timeout);
-  ns_to_timeval(t * tdf, timeout);
+  if (timeout) {
+    unsigned long long t = timeval_to_ns(timeout);
+    ns_to_timeval(t * tdf, timeout);
+  }
 
   return next_select(nfds, readfds, writefds, exceptfds, timeout);
 }
