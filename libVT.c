@@ -78,6 +78,14 @@ unsigned int sleep(unsigned int seconds) {
   return next_sleep(seconds * tdf);
 }
 
+// Wrapped alarm()
+unsigned int alarm(unsigned int seconds) {
+  static unsigned int (*next_alarm)(unsigned int);
+  get_next_fn((void**)&next_alarm, "alarm");
+
+  return next_alarm(seconds * tdf);
+}
+
 // Wrapped select()
 int select(int nfds, fd_set *readfds, fd_set *writefds,
            fd_set *exceptfds, struct timeval *timeout) {
