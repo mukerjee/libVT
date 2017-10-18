@@ -1,21 +1,20 @@
 #define _GNU_SOURCE
 #include <dlfcn.h>
-#include <sys/types.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <stdarg.h>
-#include <string.h>
+#include <sys/time.h>
+#include <poll.h>
 
 #define SECONDS_TO_NS 1000000000
 #define US_TO_NS 1000
 
 static unsigned int tdf = 20;
 
-inline unsigned long long timespec_to_ns(struct timespec *tp) {
+inline unsigned long long timespec_to_ns(const struct timespec *tp) {
   return tp->tv_sec * SECONDS_TO_NS + tp->tv_nsec;
 }
 
-inline unsigned long long timeval_to_ns(struct timeval *tv) {
+inline unsigned long long timeval_to_ns(const struct timeval *tv) {
   return tv->tv_sec * SECONDS_TO_NS + tv->tv_usec * US_TO_NS;
 }
 
@@ -85,7 +84,10 @@ int select(int nfds, fd_set *readfds, fd_set *writefds,
   static int (*next_select)(int, fd_set*, fd_set*, fd_set*, struct timeval *) = NULL;
   get_next_fn((void**)&next_select, "select");
 
-  return next_select(nfds, readfds, writefds, exceptfds, timeout * tdf);
+  unsigned long long t = timeval_to_ns(timeout);
+  ns_to_timeval(t * tdf, timeout);
+
+  return next_select(nfds, readfds, writefds, exceptfds, timeout);
 }
 
 // Wrapped poll()
@@ -97,17 +99,18 @@ int poll(struct pollfd *fds, nfds_t nfds, int timeout) {
 }
 
 // Wrapped setitimer()
-int setitimer(int which, const struct itimerval *new_value,
+int setitimer(__itimer_which_t which, const struct itimerval *new_value,
               struct itimerval *old_value) {
-  static int (*next_setitimer)(int, const struct itimerval*, struct itimerval*) = NULL;
+  static int (*next_setitimer)(__itimer_which_t, const struct itimerval*,
+                               struct itimerval*) = NULL;
   get_next_fn((void**)&next_setitimer, "setitimer");
 
-  unsigned long long next_val = timeval_to_ns(new_value->it_interval);
-  unsigned long long curr_val = timeval_to_ns(new_value->it_value);
+  unsigned long long next_val = timeval_to_ns(&new_value->it_interval);
+  unsigned long long curr_val = timeval_to_ns(&new_value->it_value);
 
   struct itimerval nv;
-  ns_to_timeval(next_val * tdf, nv.it_interval);
-  ns_to_timeval(curr_val * tdf, nv.it_value);
+  ns_to_timeval(next_val * tdf, &nv.it_interval);
+  ns_to_timeval(curr_val * tdf, &nv.it_value);
 
   return next_setitimer(which, &nv, old_value);
 }
