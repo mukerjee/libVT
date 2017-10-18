@@ -78,6 +78,14 @@ unsigned int sleep(unsigned int seconds) {
   return next_sleep(seconds * tdf);
 }
 
+// Wrapped usleep()
+int usleep(useconds_t usec) {
+  static unsigned int (*next_usleep)(unsigned int);
+  get_next_fn((void**)&next_usleep, "usleep");
+
+  return next_usleep(usec * tdf);
+}
+
 // Wrapped alarm()
 unsigned int alarm(unsigned int seconds) {
   static unsigned int (*next_alarm)(unsigned int);
