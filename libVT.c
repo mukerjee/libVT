@@ -32,13 +32,11 @@ inline void ns_to_timeval(unsigned long long ns, struct timeval *tv) {
 static void get_next_fn(void** next_fn, char* fn) {
   char* msg;
 
-  if(! *next_fn){
+  if(!*next_fn){
     *next_fn = dlsym(RTLD_NEXT, fn);
     if ((msg = dlerror()) != NULL) {
       fprintf(stderr, "dlopen failed on %s: %s\n", fn, msg);
       exit(1);
-    } else {
-      /* fprintf(stderr,  "next_%s = %p\n", fn, *next_fn); */
     }
   }
 }
