@@ -2,6 +2,7 @@ all: libVT.so
 
 install: libVT.so
 	cp libVT.so /usr/lib/
+	cp libVT.so /sdrt/vhost/
 
 libVT.so: libVT.c
 	rm -f libVT.so*
